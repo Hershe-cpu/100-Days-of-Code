@@ -1,0 +1,13 @@
+
+PINK = "#e2979c"
+RED = "#e7385b"
+GREEN = "#9bdeac"
+YELLOW = "#f7f5dd"
+WORK_MINUTES = 0
+WORK_SECONDS = 5
+BREAK_MINUTES = 0
+BREAK_SECONDS = 2
+LONGBM = 0
+LONGBS = 4
+TIMER_FONT = ("Times New Roman", 24, "bold")
+
