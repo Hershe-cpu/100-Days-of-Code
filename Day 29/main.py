@@ -1,27 +1,37 @@
 import json
 from random import randint,choice,shuffle
 import tkinter as tk
-
 from tkinter import messagebox
 import pyperclip as pipy
 
 
 FONT = ("Times New Roman", 12, "normal")
 
+
 def search():
     search_button.config(fg="white",bg="blue")
 
-    with open("data.json", "r") as file:
-        data = json.load(file)
-    try:
-        email = data[website_entry.get()]["email"]
-        password = data[website_entry.get()]["password"]
-    except KeyError:
-        messagebox.showinfo("Error", "Website Details does not exist")
+
+    if website_entry.get() == "":
+        messagebox.showinfo("Error", "Website Name cannot be empty")
         search_button.config(fg="black", bg="white")
+
     else:
-        messagebox.showinfo("Password Info",f"{website_entry.get()}\n Email: {email} \n Password: {password} ")
-        search_button.config(fg="black", bg="white")
+        try:
+            with open("data.json", "r") as file:
+                data = json.load(file)
+            email = data[website_entry.get()]["email"]
+            password = data[website_entry.get()]["password"]
+        except KeyError:
+            messagebox.showinfo("Error", "Website Details does not exist")
+            search_button.config(fg="black", bg="white")
+        except FileNotFoundError:
+            messagebox.showinfo("Error", "No data file found")
+            search_button.config(fg="black", bg="white")
+
+        else:
+            messagebox.showinfo("Password Info",f"{website_entry.get()}\n Email: {email} \n Password: {password} ")
+            search_button.config(fg="black", bg="white")
 
 
 def generate_password():
@@ -41,15 +51,6 @@ def generate_password():
     password = "".join(password_list)
     password_entry.insert(0, password)
     pipy.copy(password)
-
-
-
-# def display_data():
-#     pass_data = pd.read_csv("data.json", )
-#
-#     label = tk.Label(win, text=f"{pass_data.to_string(index=False)}")
-#     label.grid(row = 0, column = 0)
-#
 
 
 def add_data():
@@ -142,15 +143,7 @@ add_button.grid(row = 4, column = 1, columnspan = 2)
 search_button = tk.Button(root,text="Search",font=FONT,width=15,command=search)
 search_button.grid(row = 1, column = 2)
 
-# add.config(pady=5,padx=5)
-# win=tk.Tk()
-# win.title("data.json"
-# win.geometry("400x400")
-# win.config(pady=0,padx=0)
-# data = pd.read_json("data.json")
-# labels = tk.Label(win, text=f"{data.to_string( index=False)}")
-# labels.grid(row = 0, column = 0)
-# win.mainloop()
+
 root.mainloop()
 
 
