@@ -38,6 +38,13 @@ def show_answer():
 def display_word():
     global current_card,timer_id
     root.after_cancel(timer_id)
+    if not data_dict:
+        canvas.itemconfig(title,text="Congrats",fill="black")
+        canvas.itemconfig(word, text="All Words Done!",fill="black")
+        canvas.itemconfig(image, image=front_img)
+        current_card    ={}
+        return
+
     current_card = choice(data_dict)
     canvas.itemconfig(title, text="German",fill="black")
     canvas.itemconfig(word,text=f"{current_card['German']}",fill="black")
@@ -46,24 +53,24 @@ def display_word():
 
 def if_right():
     global current_card,option
-    if option =="right":
+    if current_card in data_dict:
         data_dict.remove(current_card)
     learn_data = pd.DataFrame(data_dict)
     learn_data.to_csv("./data/words_to_learn.csv",index=False)
-    option = "right"
-
     display_word()
-def if_wrong():
-    global option
-    option = "Wrong"
-    if_right()
 
+
+def if_wrong():
+    display_word()
+
+def quit_game():
+    exit()
 
 
 # WINDOW SETUP
 root = Tk()
 root.title("FlashCard")
-root.geometry("900x740")
+root.geometry("900x780")
 root.config(bg=BACKGROUND,padx=50,pady=50)
 
 
@@ -93,6 +100,7 @@ right_button.grid(row=1,column=0,padx=10,pady=10)
 wrong_img = tk.PhotoImage(file="./images/wrong.png",format="png")
 wrong_button = tk.Button(root,image=wrong_img,bg=BACKGROUND,command=if_wrong,bd=0,highlightthickness=0)
 wrong_button.grid(row=1,column=1,padx=10,pady=10)
-
+exit_button=tk.Button(root,text="Quit",bg=BACKGROUND,command=quit_game,font=("Arial",20,"normal"))
+exit_button.grid(row=2,columnspan=2,padx=10,pady=10)
 display_word()
 root.mainloop()
